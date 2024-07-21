@@ -226,22 +226,22 @@ jobs:
       - name: Create GitHub Release
         id: create_release
         uses: ncipollo/release-action@v1
-         with:
-           tag: v${{ github.run_number }}
-           name: Release ${{ github.run_number }}
-           body: |
-             ## Changes
-             - New release
-           draft: false
-           prerelease: false
-           artifacts: |
-             app-release.apk
-             app-release.aab
-             build/ios/iphoneos/*.app
-             release-windows/*
-             release-macos/*
-             release-linux/*
-           token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: v${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          body: |
+            ## Changes
+            - New release
+          draft: false
+          prerelease: false
+          artifacts: |
+            app-release.apk
+            app-release.aab
+            build/ios/iphoneos/*.app
+            release-windows/*
+            release-macos/*
+            release-linux/*
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_web:
     name: Deploy Web to GitHub Pages
