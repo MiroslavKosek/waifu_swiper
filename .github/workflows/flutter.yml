@@ -8,6 +8,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  permissions:
+    contents: write
 
 jobs:
   test:
@@ -156,29 +158,34 @@ jobs:
           name: release-macos
           path: build/macos/Build/Release
 
-  build_linux:
-    name: Build Linux
-    runs-on: ubuntu-latest
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v4
+build_linux:
+  name: Build Linux
+  runs-on: ubuntu-latest
+  needs: [test]
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.22.2'
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.22.2'
 
-      - name: Install dependencies
-        run: flutter pub get
+    - name: Install dependencies
+      run: flutter pub get
 
-      - name: Build Linux
-        run: flutter build linux --release
+    - name: Install Build Tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build build-essential
 
-      - name: Upload Linux Build as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-linux
-          path: build/linux/x64/release/bundle
+    - name: Build Linux
+      run: flutter build linux --release
+
+    - name: Upload Linux Build as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-linux
+        path: build/linux/x64/release/bundle
 
   release:
     name: Create Release
