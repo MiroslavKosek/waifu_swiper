@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-ios
-          path: build/ios/iphoneos
+          path: build/ios/iphoneos/Runner.app
 
   build_web:
     name: Build Web
@@ -133,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build\windows\x64\runner\Release
+          path: build\windows\x64\runner\Release\waifu_swiper.exe
 
   build_macos:
     name: Build macOS
@@ -157,7 +157,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: build/macos/Build/Products/Release
+          path: build/macos/Build/Products/Release/Waifu Swiper.app
 
   build_linux:
     name: Build Linux
@@ -188,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-linux
-          path: build/linux/x64/release/bundle
+          path: build/linux/x64/release/bundle/waifu_swiper
 
   release:
     name: Create Release
