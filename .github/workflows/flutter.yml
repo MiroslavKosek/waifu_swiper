@@ -9,6 +9,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     name: Test
@@ -65,7 +68,7 @@ jobs:
     runs-on: macos-latest
     needs: [test]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -79,10 +82,10 @@ jobs:
         run: flutter build ios --release --no-codesign
 
       - name: Upload iOS Build as Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: release-ios
-          path: build/ios/iphoneos
+          path: build/ios/iphoneos/Runner.app
 
   build_web:
     name: Build Web
@@ -100,7 +103,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release
+        run: flutter build web --release --base-href "/waifu_swiper/" --web-renderer html
 
       - name: Upload Web Build as Artifact
         uses: actions/upload-artifact@v4
@@ -130,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build/windows/runner/Release
+          path: build\windows\x64\runner\Release\waifu_swiper.exe
 
   build_macos:
     name: Build macOS
@@ -154,7 +157,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: build/macos/Build/Release
+          path: build/macos/Build/Products/Release/Waifu Swiper.app
 
   build_linux:
     name: Build Linux
@@ -171,6 +174,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install Build Tools
+        run: |
+          flutter doctor
+          sudo apt-get update -y
+          sudo apt-get install -y clang ninja-build libgtk-3-dev
+          flutter doctor
+
       - name: Build Linux
         run: flutter build linux --release
 
@@ -178,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-linux
-          path: build/linux/x64/release/bundle
+          path: build/linux/x64/release/bundle/waifu_swiper
 
   release:
     name: Create Release
@@ -200,7 +210,7 @@ jobs:
           path: .
 
       - name: Download iOS Build Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: release-ios
           path: .
@@ -226,22 +236,22 @@ jobs:
       - name: Create GitHub Release
         id: create_release
         uses: ncipollo/release-action@v1
-         with:
-           tag: v${{ github.run_number }}
-           name: Release ${{ github.run_number }}
-           body: |
-             ## Changes
-             - New release
-           draft: false
-           prerelease: false
-           artifacts: |
-             app-release.apk
-             app-release.aab
-             build/ios/iphoneos/*.app
-             release-windows/*
-             release-macos/*
-             release-linux/*
-           token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: v${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          body: |
+            ## Changes
+            - New release
+          draft: false
+          prerelease: false
+          artifacts: |
+            app-release.apk
+            app-release.aab
+            build/ios/iphoneos/*.app
+            release-windows/*
+            release-macos/*
+            release-linux/*
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_web:
     name: Deploy Web to GitHub Pages
@@ -259,5 +269,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
