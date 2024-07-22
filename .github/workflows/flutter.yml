@@ -133,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build\windows\runner\Release
+          path: build\windows\x64\runner\Release\
 
   build_macos:
     name: Build macOS
@@ -157,7 +157,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: /macos/Build/Products/Release
+          path: build/macos/Build/Products/Release/
 
   build_linux:
     name: Build Linux
