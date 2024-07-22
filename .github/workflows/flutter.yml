@@ -247,10 +247,10 @@ jobs:
           artifacts: |
             app-release.apk
             app-release.aab
-            build/ios/iphoneos/*.app
-            release-windows/*
-            release-macos/*
-            release-linux/*
+            release-ios.app
+            release-macos.app
+            release-windows.exe
+            release-linux
           token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_web:
