@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -63,30 +60,6 @@ jobs:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
-  build_ios:
-    name: Build iOS
-    runs-on: macos-latest
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.22.2'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build iOS
-        run: flutter build ios --release --no-codesign
-
-      - name: Upload iOS Build as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-ios
-          path: build/ios/iphoneos/Runner.app
-
   build_web:
     name: Build Web
     runs-on: ubuntu-latest
@@ -134,30 +107,6 @@ jobs:
         with:
           name: release-windows
           path: build\windows\x64\runner\Release\waifu_swiper.exe
-
-  build_macos:
-    name: Build macOS
-    runs-on: macos-latest
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.22.2'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build macOS
-        run: flutter build macos --release
-
-      - name: Upload macOS Build as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos
-          path: build/macos/Build/Products/Release/Waifu Swiper.app
 
   build_linux:
     name: Build Linux
@@ -209,22 +158,10 @@ jobs:
           name: release-aab
           path: .
 
-      - name: Download iOS Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: release-ios
-          path: .
-
       - name: Download Windows Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: release-windows
-          path: .
-
-      - name: Download macOS Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: release-macos
           path: .
 
       - name: Download Linux Build Artifact
@@ -247,10 +184,8 @@ jobs:
           artifacts: |
             app-release.apk
             app-release.aab
-            build/ios/iphoneos/*.app
-            release-windows/*
-            release-macos/*
-            release-linux/*
+            waifu_swiper.exe
+            waifu_swiper
           token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_web:
