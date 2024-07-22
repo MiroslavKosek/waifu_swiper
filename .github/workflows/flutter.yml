@@ -103,7 +103,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release --base-href "/waifu_swiper/"
+        run: flutter build web --release --base-href "/waifu_swiper/" --web-renderer html
 
       - name: Upload Web Build as Artifact
         uses: actions/upload-artifact@v4
@@ -133,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build\windows\x64\runner\Release\
+          path: build\windows\x64\runner\Release
 
   build_macos:
     name: Build macOS
@@ -157,7 +157,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: build/macos/Build/Products/Release/
+          path: build/macos/Build/Products/Release
 
   build_linux:
     name: Build Linux
