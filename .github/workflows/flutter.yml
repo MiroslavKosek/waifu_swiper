@@ -9,10 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  permissions:
-    contents: write
-    
   test:
     name: Test
     runs-on: ubuntu-latest
