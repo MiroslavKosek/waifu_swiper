@@ -142,7 +142,7 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [build_android, build_ios, build_web, build_windows, build_macos, build_linux]
+    needs: [build_android, build_windows, build_linux]
     steps:
       - uses: actions/checkout@v4
 
