@@ -247,10 +247,10 @@ jobs:
           artifacts: |
             app-release.apk
             app-release.aab
-            release-ios.app
-            release-macos.app
-            release-windows.exe
-            release-linux
+            Runner.app
+            Waifu Swiper.app
+            waifu_swiper.exe
+            waifu_swiper
           token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy_web:
